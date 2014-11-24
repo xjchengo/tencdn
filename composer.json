@@ -1,0 +1,23 @@
+{
+    "name": "xjchen/tencdn",
+    "license": "MIT",
+    "description": "laravel package for tencent cdn management",
+    "keywords": ["qcloud", "laravel", "cdn"],
+    "authors": [
+        {
+            "name": "xjchen",
+            "email": "xchenxujian@126.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*",
+        "ext-svn": "1.0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Xjchen\\Tencdn\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
