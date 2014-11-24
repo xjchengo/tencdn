@@ -15,6 +15,9 @@
         "ext-svn": "1.0.2"
     },
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "Xjchen\\Tencdn\\": "src/"
         }
