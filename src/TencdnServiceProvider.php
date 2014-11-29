@@ -18,6 +18,7 @@ class TencdnServiceProvider extends ServiceProvider {
     public function boot()
     {
         $this->package('xjchen/tencdn', null, __DIR__);
+        //$this->commands('command.binding');
     }
 
 	/**
