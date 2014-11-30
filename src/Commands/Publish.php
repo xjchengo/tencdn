@@ -60,7 +60,7 @@ class Publish extends Command {
 		if(!is_array($this->local_path))
 			$this->local_path=[$this->local_path];
 
-	    foreach ($this->local_path as $path) {
+		foreach ($this->local_path as $path) {
 			exec("yes | cp -rf $path $this->temp_cdn_path");
 		}
 
