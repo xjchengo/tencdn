@@ -18,6 +18,7 @@ class Publish extends Command {
 	protected $local_path;
 	protected $url;
 	protected $username;
+	protected $temp_cdn_path;
 
 	/**
 	 * The console command description.
@@ -26,12 +27,7 @@ class Publish extends Command {
 	 */
 	protected $description = 'Publish local resources to tencent cdn.';
 
-	//$this->username = Config::get('tencdn::svn.username');
-	//$this->password = Config::get('tencdn::svn.password');
-	//$this->local_path = Config::get('tencdn::svn.local_resource_path');
-	//$this->url = Config::get('tencdn::svn.url');
-	//protected $file;
-	//$file = $this->argument('file');
+	
 
 	/**
 	 * Create a new command instance.
@@ -40,10 +36,11 @@ class Publish extends Command {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->username = Config::get('tencdn::svn.username');
+	    $this->username = Config::get('tencdn::svn.username');
 	    $this->password = Config::get('tencdn::svn.password');
 	    $this->local_path = Config::get('tencdn::svn.local_resource_path');
 	    $this->url = Config::get('tencdn::svn.url');
+	    $this->temp_cdn_path = Config::get('tencdn::svn.temp_cdn_path');
 
 	}
 
@@ -55,24 +52,31 @@ class Publish extends Command {
 	public function fire()
 	{
 		$this->files=$this->argument('files');
-		//$this->info('fill the exact commands');
 		svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_USERNAME, $this->username);
 		svn_auth_set_parameter(SVN_AUTH_PARAM_DEFAULT_PASSWORD, $this->password);
 
-		svn_checkout($this->url,$this->local_path);
+		svn_checkout($this->url,$this->temp_cdn_path);
 
-		if(!is_null($this->files))
+		if(!is_array($this->local_path))
+			$this->local_path=[$this->local_path];
+
+	    foreach ($this->local_path as $path) {
+			exec("yes | cp -rf $path $this->temp_cdn_path");
+		}
+
+		if(!is_null($this->files)){
 			foreach ($this->files as $file) {
-				exec("cp -rf $file $this->local_path");
+				exec("yes | cp -rf $file $this->temp_cdn_path");
 			}
+		}
 			
 
-		$output = svn_add($this->local_path,true,true);
+		$output = svn_add($this->temp_cdn_path,true,true);
 		if($output != true){
 			$this->error('failed to add file to svn');
 			return false;
 		}
-		$output = svn_commit('Successfuly Commit',array($this->local_path));
+		$output = svn_commit('Successfuly Commit',array($this->temp_cdn_path));
 		if(!is_int($output[0])){
 			$this->error('failed to commit file to svn');
 			return false;
