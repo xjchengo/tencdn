@@ -15,7 +15,10 @@ if (!function_exists('cdn'))
      */
     function cdn($path, $secure = null)
     {
-        //
+        if (!Config::get('tencdn::svn.cdn'))
+            return asset($path);
+        else
+            return Config::get('tencdn::svn.access_path').$path;
 
     }
 }

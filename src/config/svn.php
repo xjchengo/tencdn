@@ -7,9 +7,9 @@ return [
 
     'cdn' => true,
     'url'                 => '',
-    'username'            => 'none',
-    'password'            => 'none',
+    'username'            => '',
+    'password'            => '',
     'local_resource_path' => '',
-    'temp_cdn_path'       => ''
-
+    'temp_cdn_path'       => '',
+    'access_path'         => '',
 ];
